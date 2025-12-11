@@ -1,0 +1,17 @@
+1
+.DS_Store
+
+.env
+
+certs/freeradius/cert.pem
+certs/freeradius/privkey.pem
+
+certs/nginx/ssl.crt
+certs/nginx/ssl.key
+
+certs/signing/ca.pem
+certs/signing/cert.pem
+certs/signing/fullchain.pem
+certs/signing/privkey.pem
+
+geoLiteDB/GeoLite2-City.mmdb

@@ -1,0 +1,72 @@
+services:
+
+  web:
+    image: ghcr.io/wireless-broadband-alliance/wba-openroaming-portal:1.8.0
+    volumes:
+      - .env/:/var/www/openroaming/.env
+      - ./pgp_public_key/:/var/www/openroaming/pgp_public_key/
+      - ./certs/signing/:/var/www/openroaming/signing-keys/
+      - ./geoLiteDB:/var/www/openroaming/geoLiteDB
+      - uploads:/var/www/openroaming/public/resources/uploaded
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx/sites-ssl:/etc/nginx/conf.d:ro
+      - ./config/supervisor/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf:ro
+      - ./config/jwt/:/var/www/openroaming/config/jwt/
+      - ./config/profile_templates/:/var/www/openroaming/profile_templates/
+      - ./config/portal/SettingFixture.php:/var/www/openroaming/src/DataFixtures/SettingFixture.php:ro
+      - ./certs/nginx/ssl.crt:/etc/nginx/ssl/ssl.crt:ro
+      - ./certs/nginx/ssl.key:/etc/nginx/ssl/ssl.key:ro
+    ports:
+      - "80:80"
+      - "443:443"
+
+  mysql-web:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: openroaming
+      MYSQL_ROOT_PASSWORD: ${MYSQL_WEB_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_WEB_USER}
+      MYSQL_PASSWORD: ${MYSQL_WEB_PASSWORD}
+    volumes:
+      - mysql-web:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  memcached:
+    image: memcached:1.6
+
+  mysql-radius:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: radius
+      MYSQL_ROOT_PASSWORD: ${MYSQL_RADIUS_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_RADIUS_USER}
+      MYSQL_PASSWORD: ${MYSQL_RADIUS_PASSWORD}
+    volumes:
+      - mysql-radius:/var/lib/mysql
+      - ./config/mysql-radius/schema/freeradius.sql:/docker-entrypoint-initdb.d/freeradius.sql
+    ports:
+      - "3307:3306"
+
+  freeradius:
+    restart: always
+    image: freeradius/freeradius-server:3.2.1
+    command: [ "radiusd", "-f", "-l", "/dev/stdout", "-xx" ]
+    depends_on:
+      - mysql-radius
+    volumes:
+      - ./config/freeradius/mods-available/sql:/etc/freeradius/mods-enabled/sql
+      - ./config/freeradius/mods-available/eap:/etc/freeradius/mods-enabled/eap
+      - ./config/freeradius/clients.conf:/etc/freeradius/clients.conf
+      - ./certs/freeradius/:/etc/freeradius/certs
+    ports:
+      - "1812:1812/udp"
+      - "1813:1813/udp"
+
+volumes:
+  mysql-web:
+      driver: local
+  mysql-radius:
+      driver: local
+  uploads:
+      driver: local
