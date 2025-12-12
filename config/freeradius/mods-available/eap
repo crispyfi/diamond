@@ -825,7 +825,7 @@ eap {
 		#  EAP conversation, then this configuration entry is
 		#  ignored.
 		#
-		default_eap_type = pap
+		default_eap_type = mschap
 
 		#  The tunneled authentication request does not usually
 		#  contain useful attributes like 'Calling-Station-Id',

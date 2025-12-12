@@ -1,15 +1,14 @@
 <?xml version="1.0"?>
-<CarrierProvisioning
-        xmlns="http://www.microsoft.com/networking/CarrierControl/v1">
+<CarrierProvisioning xmlns="http://www.microsoft.com/networking/CarrierControl/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <Global>
         <CarrierId>{@UUID@}</CarrierId>
         <SubscriberId>1234597890</SubscriberId>
     </Global>
-<WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+  <WLANProfiles>
+    <WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
 	<name>@DISPLAY_NAME@</name>
 	<SSIDConfig>
 		<SSID>
-			<hex>5F50617373706F696E74</hex>
 			<name>_Passpoint</name>
 		</SSID>
 		<nonBroadcast>false</nonBroadcast>
@@ -69,7 +68,8 @@
             </EapHostUserCredentials>
 		</security>
 	</MSM>
-</WLANProfile>
+    </WLANProfile>
+  </WLANProfiles>
 <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
     <SignedInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
         <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
@@ -90,3 +90,6 @@
     </KeyInfo>
 </Signature>
 </CarrierProvisioning>
+
+
+

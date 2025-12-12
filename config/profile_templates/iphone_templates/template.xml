@@ -40,7 +40,7 @@
 						<string>@RADIUS_TLS_NAME@</string>
 					</array>
 					<key>TTLSInnerAuthentication</key>
-					<string>PAP</string>
+					<string>MSCHAPv2</string>
 					<key>UserName</key>
 					<string>@USERNAME@</string>
 					<key>UserPassword</key>
