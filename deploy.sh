@@ -39,7 +39,7 @@ sed -i "s/-RSQLPASS-/${MYSQL_RADIUS_PASSWORD}/g" $SCRIPT_DIR/config/freeradius/m
 sed -i "s/-RSHAREDSECRET-/${RADIUS_SECRET}/g" $SCRIPT_DIR/config/freeradius/clients.conf
 
 # Request certificate from LetsEncrypt
-certbot certonly --standalone -d ${HOSTNAME} -d ${HOSTNAME} -m ${EMAIL_ADDRESS} --agree-tos --no-eff-email
+certbot certonly --standalone -d ${HOSTNAME} -d ${HOSTNAME} -m ${EMAIL_ADDRESS} --agree-tos --no-eff-email --rsa-key-size 2048
 
 # copy certs to signing directory
 echo "Copying certificates to staging directories"
